@@ -4,46 +4,33 @@ import java.util.Calendar
 
 import Main.LanguagePath
 import akka.actor.{Actor, ActorRef}
+import helper.HtmlCleanerHelper
 
 import scala.io.Source
 
-case class LanguageCommonVerbs(code: String, commonVerbs: List[String])
-
 class AllVerbsParser(persister: ActorRef) extends Actor {
-
-  // currently Jsoup is not parsing data from BIG page, will check later
-  /*def receive: Receive = {
-
-    case LanguagePath(code, url) => {
-
-      println(s"Received $code with $url at ${Calendar.getInstance().getTime}")
-      val doc = Jsoup.connect(url.toString).get
-      val unParsedVerbs = doc.select("div.ui segment stacked ul li a")
-      println(s"Finished url: $url at ${Calendar.getInstance().getTime}")
-
-      var commonVerbs = List[String]()
-      unParsedVerbs.forEach(v => {
-        commonVerbs :+= v.attr("href").split("/").last
-      })
-
-      persister ! LanguageCommonVerbs(code.toString, commonVerbs)
-    }
-
-    case _ => println("huh?")
-  }*/
 
   def receive: Receive = {
 
     case LanguagePath(code, url) => {
 
       println(s"Received $code with $url at ${Calendar.getInstance().getTime}")
+
       val urlSource = Source.fromURL(url)
-      val html = urlSource.mkString
+      val dirtyHtml = urlSource.mkString
+      val html = HtmlCleanerHelper.cleanHtml(dirtyHtml)
+      val xmlElement = scala.xml.XML.loadString(html)
 
-      // TODO: parse in some other way
-      // <div class ="ui segment stacked">
+      val divs = xmlElement \\ "div"
+      divs.foreach(div => {
+        val cls = div.attribute("class").getOrElse("").toString.trim
+        if (cls == "ui segment stacked") {
+          val aa = div \\ "a"
+          println(s"$code - ${aa.size}")
+        }
+      })
+
       urlSource.close()
-
     }
 
     case _ => println("huh?")

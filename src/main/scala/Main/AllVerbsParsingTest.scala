@@ -5,15 +5,16 @@ import parser.{AllVerbsParser, LanguagePersister}
 
 import scala.language.postfixOps
 
-case class LanguagePath(code: String, url: String)
-
-object AllVerbsParsingManagerTest extends App {
+object AllVerbsParsingTest extends App {
 
   val urls = List(
-    LanguagePath("en", "https://cooljugator.com/en/list/10"),
-    /*LanguagePath("ar", "https://cooljugator.com/ar"),
-    LanguagePath("ru", "https://cooljugator.com/ru"),
-    LanguagePath("es", "https://cooljugator.com/es"),*/
+    LanguagePath("en", "https://cooljugator.com/en/list/all"),
+    LanguagePath("lt", "https://cooljugator.com/lt/list/all"),
+    LanguagePath("ar", "https://cooljugator.com/ar/list/all"),
+    LanguagePath("ru", "https://cooljugator.com/ru/list/all"),
+    LanguagePath("es", "https://cooljugator.com/es/list/all"),
+    LanguagePath("af", "https://cooljugator.com/af/list/index"),
+    LanguagePath("tr", "https://cooljugator.com/tr/list/all"),
   )
 
   val system = ActorSystem("cooljugatorParsingSystem")

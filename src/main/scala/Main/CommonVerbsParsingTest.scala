@@ -7,23 +7,24 @@ import scala.language.postfixOps
 
 case class LanguagePath(code: String, url: String)
 
-object CommonVerbsParsingManagerTest extends App {
+object CommonVerbsParsingTest extends App {
 
   val urls = List(
-    LanguagePath("en", "https://cooljugator.com/en"),
-    LanguagePath("ar", "https://cooljugator.com/ar"),
-    LanguagePath("ru", "https://cooljugator.com/ru"),
-    LanguagePath("es", "https://cooljugator.com/es"),
+    "en",
+    "ar",
+    "ru",
+    "lt",
+    "af",
   )
 
   val system = ActorSystem("cooljugatorParsingSystem")
   val persister = system.actorOf(Props[LanguagePersister], name = "persister")
 
-  urls.foreach(lp => {
+  println()
+  for ((code, index) <- urls.zipWithIndex) {
     val languageParser = system.actorOf(Props(new CommonVerbsParser(persister)),
-                                        name = "parser" + lp.code)
-    println(languageParser)
+                                        name = "parser" + code)
 
-    languageParser ! lp
-  })
+    languageParser ! (code, index)
+  }
 }
