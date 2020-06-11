@@ -21,8 +21,9 @@ object AllVerbsParsingDemo extends App {
   val persister = system.actorOf(Props[LanguagePersister], name = "persister")
 
   urls.foreach(lp => {
-    val languageParser =
-      system.actorOf(Props(new AllVerbsParser(persister)), name = "parser" + lp.code)
+
+    val name = "parser" + lp.code
+    val languageParser = system.actorOf(Props(new AllVerbsParser(persister)), name)
 
     println(languageParser)
 
