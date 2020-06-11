@@ -5,7 +5,7 @@ import parser.{AllVerbsParser, LanguagePersister}
 
 import scala.language.postfixOps
 
-object AllVerbsParsingTest extends App {
+object AllVerbsParsingDemo extends App {
 
   val urls = List(
     LanguagePath("en", "https://cooljugator.com/en/list/all"),
@@ -21,8 +21,9 @@ object AllVerbsParsingTest extends App {
   val persister = system.actorOf(Props[LanguagePersister], name = "persister")
 
   urls.foreach(lp => {
-    val languageParser = system.actorOf(Props(new AllVerbsParser(persister)),
-                                        name = "parser" + lp.code)
+    val languageParser =
+      system.actorOf(Props(new AllVerbsParser(persister)), name = "parser" + lp.code)
+
     println(languageParser)
 
     languageParser ! lp
