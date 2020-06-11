@@ -22,11 +22,13 @@ object AllVerbsParsingDemo extends App {
 
   urls.foreach(lp => {
 
-    val name = "parser" + lp.code
+    val name = "parser-" + lp.code
     val languageParser = system.actorOf(Props(new AllVerbsParser(persister)), name)
 
-    println(languageParser)
+    printf("\n" + languageParser)
 
     languageParser ! lp
   })
+
+  println()
 }

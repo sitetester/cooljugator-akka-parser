@@ -14,7 +14,7 @@ class AllVerbsParser(persister: ActorRef) extends Actor {
 
     case LanguagePath(code, url) => {
 
-      println(s"Received $code with $url at ${Calendar.getInstance().getTime}")
+      printf(s"\nReceived `$code` with $url at ${Calendar.getInstance().getTime}")
 
       val urlSource = Source.fromURL(url)
       val dirtyHtml = urlSource.mkString
@@ -26,7 +26,7 @@ class AllVerbsParser(persister: ActorRef) extends Actor {
         val cls = div.attribute("class").getOrElse("").toString.trim
         if (cls == "ui segment stacked") {
           val aa = div \\ "a"
-          println(s"$code - ${aa.size}")
+          printf(s"\n$code - ${aa.size} - ${Calendar.getInstance().getTime}")
         }
       })
 
